@@ -1,11 +1,25 @@
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
+#include <iostream>
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML work!");
+	sf::RenderWindow window(sf::VideoMode(1200, 800), "SFML work!");
 
-	sf::CircleShape shape(100.0f);
-	shape.setFillColor(sf::Color::Green);
+	sf::Texture spriteSheet;
+	if (!spriteSheet.loadFromFile("../Resources/Textures/RPGpack_sheet.png"))
+	{
+		std::cerr << "Did not load texture" << std::endl;
+	}
+
+	sf::Sprite grass;
+	grass.setTexture(spriteSheet);
+	grass.setTextureRect(sf::IntRect(64, 64, 64, 64));
+	sf::Sprite water;
+	water.setTexture(spriteSheet);
+	water.setTextureRect(sf::IntRect(704, 64, 64, 64));
+
+	int width = 10;
+	int height = 10;
 
 	while (window.isOpen())
 	{
@@ -17,7 +31,23 @@ int main()
 		}
 
 		window.clear();
-		window.draw(shape);
+		for (int i = 0; i < width; i++)
+		{
+			for (int j = 0; j < height; j++)
+			{
+				if ((i % 2 == 1 && j % 2 == 0) || (i % 2 == 0 && j % 2 == 1))
+				{
+					grass.setPosition(sf::Vector2f(i * 64, j * 64));
+					window.draw(grass);
+				}
+				else
+				{
+					water.setPosition(sf::Vector2f(i * 64, j * 64));
+					window.draw(water);
+				}
+				
+			}
+		}
 		window.display();
 	}
 
